@@ -9,7 +9,8 @@ static int static_var = 0;
 // Variable del segmento BSS (variable global no inicializada)
 int bss_var;
 
-typedef enum {
+typedef enum
+{
     FICTION,
     NON_FICTION,
     SCIENCE,
@@ -19,7 +20,8 @@ typedef enum {
     OTHER
 } genre_t;
 
-typedef struct _book {
+typedef struct _book
+{
     int id;
     char title[100];
     char author[100];
@@ -29,7 +31,8 @@ typedef struct _book {
     struct _book *next;
 } book_t;
 
-typedef struct _member {
+typedef struct _member
+{
     int id;
     char name[100];
     int issued_count;
@@ -38,9 +41,9 @@ typedef struct _member {
 } member_t;
 
 // Prototipos de funciones
-const char* genreToString(genre_t genre);
-void addBook(book_t **library, int* count);
-book_t* findBookById(book_t *library, int bookID);
+const char *genreToString(genre_t genre);
+void addBook(book_t **library, int *count);
+book_t *findBookById(book_t *library, int bookID);
 void displayBooksRecursive(book_t *library);
 void displayBooks(book_t *library);
 void addMember(member_t **members, int *memberCount);
@@ -56,23 +59,35 @@ void displayMembers(member_t *members, book_t *library);
 void searchMember(member_t *members, book_t *library);
 
 // Función para convertir el género a texto
-const char* genreToString(genre_t genre) {
-    switch (genre) {
-        case FICTION: return "Ficcion";
-        case NON_FICTION: return "No Ficcion";
-        case SCIENCE: return "Ciencia";
-        case HISTORY: return "Historia";
-        case FANTASY: return "Fantasia";
-        case BIOGRAPHY: return "Biografia";
-        case OTHER: return "Otro";
-        default: return "Desconocido";
+const char *genreToString(genre_t genre)
+{
+    switch (genre)
+    {
+    case FICTION:
+        return "Ficcion";
+    case NON_FICTION:
+        return "No Ficcion";
+    case SCIENCE:
+        return "Ciencia";
+    case HISTORY:
+        return "Historia";
+    case FANTASY:
+        return "Fantasia";
+    case BIOGRAPHY:
+        return "Biografia";
+    case OTHER:
+        return "Otro";
+    default:
+        return "Desconocido";
     }
 }
 
-void addBook(book_t **library, int* count ) {
+void addBook(book_t **library, int *count)
+{
     // Asignacion de memoria en el heap
     book_t *new_book = (book_t *)malloc(sizeof(book_t));
-    if (!new_book) {
+    if (!new_book)
+    {
         printf("Error al asignar memoria para el nuevo libro.\n");
         return;
     }
@@ -110,10 +125,13 @@ void addBook(book_t **library, int* count ) {
     displayMemoryUsage();
 }
 
-book_t* findBookById(book_t *library, int bookID) {
+book_t *findBookById(book_t *library, int bookID)
+{
     book_t *current = library;
-    while (current) {
-        if (current->id == bookID) {
+    while (current)
+    {
+        if (current->id == bookID)
+        {
             return current;
         }
         current = current->next;
@@ -121,17 +139,21 @@ book_t* findBookById(book_t *library, int bookID) {
     return NULL;
 }
 
-void displayBooksRecursive(book_t *library) {
-    if (!library) {
+void displayBooksRecursive(book_t *library)
+{
+    if (!library)
+    {
         return;
     }
     printf("\nID libro: %d\nTitulo: %s\nAutor: %s\nAno de publicacion: %d\nGenero: %s\nCantidad: %d\n",
-        library->id, library->title, library->author, library->publication_year, genreToString(library->genre), library->quantity);
+           library->id, library->title, library->author, library->publication_year, genreToString(library->genre), library->quantity);
     displayBooksRecursive(library->next);
 }
 
-void displayBooks(book_t *library) {
-    if (!library) {
+void displayBooks(book_t *library)
+{
+    if (!library)
+    {
         printf("\nNo hay libros disponibles.\n");
         return;
     }
@@ -141,10 +163,12 @@ void displayBooks(book_t *library) {
     displayMemoryUsage();
 }
 
-void addMember(member_t **members, int *memberCount) {
+void addMember(member_t **members, int *memberCount)
+{
     // Asignacion de memoria en el heap
     member_t *new_member = (member_t *)malloc(sizeof(member_t));
-    if (!new_member) {
+    if (!new_member)
+    {
         printf("Error al asignar memoria para el nuevo miembro.\n");
         return;
     }
@@ -166,7 +190,8 @@ void addMember(member_t **members, int *memberCount) {
     displayMemoryUsage();
 }
 
-void issueBook(book_t *library, member_t *members) {
+void issueBook(book_t *library, member_t *members)
+{
     int bookID, memberID;
     printf("\nIngresa el ID del miembro: ");
     scanf("%d", &memberID);
@@ -177,8 +202,10 @@ void issueBook(book_t *library, member_t *members) {
     member_t *memberFound = NULL;
 
     book_t *current_book = library;
-    while (current_book) {
-        if (current_book->id == bookID && current_book->quantity > 0) {
+    while (current_book)
+    {
+        if (current_book->id == bookID && current_book->quantity > 0)
+        {
             bookFound = current_book;
             break;
         }
@@ -186,15 +213,18 @@ void issueBook(book_t *library, member_t *members) {
     }
 
     member_t *current_member = members;
-    while (current_member) {
-        if (current_member->id == memberID) {
+    while (current_member)
+    {
+        if (current_member->id == memberID)
+        {
             memberFound = current_member;
             break;
         }
         current_member = current_member->next;
     }
 
-    if (bookFound && memberFound) {
+    if (bookFound && memberFound)
+    {
         bookFound->quantity--;
         memberFound->issued_count++;
         memberFound->issued_books = realloc(memberFound->issued_books, memberFound->issued_count * sizeof(int));
@@ -202,13 +232,16 @@ void issueBook(book_t *library, member_t *members) {
         printf("Memoria reasignada para los libros prestados del miembro (ID: %d) en el heap\n", memberFound->id);
         memberFound->issued_books[memberFound->issued_count - 1] = bookID;
         printf("\nLibro prestado satisfactoriamente!\n");
-    } else {
+    }
+    else
+    {
         printf("\nLibro o miembro no encontrados.\n");
     }
     displayMemoryUsage();
 }
 
-void returnBook(book_t *library, member_t *members) {
+void returnBook(book_t *library, member_t *members)
+{
     int bookID, memberID;
     printf("\nIngresa el ID del miembro: ");
     scanf("%d", &memberID);
@@ -219,8 +252,10 @@ void returnBook(book_t *library, member_t *members) {
     member_t *memberFound = NULL;
 
     book_t *current_book = library;
-    while (current_book) {
-        if (current_book->id == bookID) {
+    while (current_book)
+    {
+        if (current_book->id == bookID)
+        {
             bookFound = current_book;
             break;
         }
@@ -228,20 +263,26 @@ void returnBook(book_t *library, member_t *members) {
     }
 
     member_t *current_member = members;
-    while (current_member) {
-        if (current_member->id == memberID) {
+    while (current_member)
+    {
+        if (current_member->id == memberID)
+        {
             memberFound = current_member;
             break;
         }
         current_member = current_member->next;
     }
 
-    if (bookFound && memberFound) {
+    if (bookFound && memberFound)
+    {
         int found = 0;
-        for (int i = 0; i < memberFound->issued_count; i++) {
-            if (memberFound->issued_books[i] == bookID) {
+        for (int i = 0; i < memberFound->issued_count; i++)
+        {
+            if (memberFound->issued_books[i] == bookID)
+            {
                 found = 1;
-                for (int j = i; j < memberFound->issued_count - 1; j++) {
+                for (int j = i; j < memberFound->issued_count - 1; j++)
+                {
                     memberFound->issued_books[j] = memberFound->issued_books[j + 1];
                 }
                 memberFound->issued_count--;
@@ -251,21 +292,28 @@ void returnBook(book_t *library, member_t *members) {
                 break;
             }
         }
-        if (found) {
+        if (found)
+        {
             bookFound->quantity++;
             printf("\nLibro devuelto satisfactoriamente!\n");
-        } else {
+        }
+        else
+        {
             printf("\nEl miembro no tiene este libro prestado.\n");
         }
-    } else {
+    }
+    else
+    {
         printf("\nLibro o miembro no encontrados.\n");
     }
     displayMemoryUsage();
 }
 
-void freeLibrary(book_t *library) {
+void freeLibrary(book_t *library)
+{
     book_t *current = library;
-    while (current) {
+    while (current)
+    {
         book_t *next = current->next;
         incrementHeapDeallocations(current);
         free(current);
@@ -274,9 +322,11 @@ void freeLibrary(book_t *library) {
     displayMemoryUsage();
 }
 
-void freeMembers(member_t *members) {
+void freeMembers(member_t *members)
+{
     member_t *current = members;
-    while (current) {
+    while (current)
+    {
         member_t *next = current->next;
         incrementHeapDeallocations(current->issued_books);
         free(current->issued_books);
@@ -287,15 +337,18 @@ void freeMembers(member_t *members) {
     displayMemoryUsage();
 }
 
-void saveLibraryToFile(book_t *library, const char *filename) {
+void saveLibraryToFile(book_t *library, const char *filename)
+{
     FILE *file = fopen(filename, "w");
-    if (!file) {
+    if (!file)
+    {
         printf("Error al abrir el archivo para guardar la biblioteca.\n");
         return;
     }
 
     book_t *current = library;
-    while (current) {
+    while (current)
+    {
         fprintf(file, "%d\n%s\n%s\n%d\n%s\n%d\n", current->id, current->title, current->author, current->publication_year, genreToString(current->genre), current->quantity);
         current = current->next;
     }
@@ -305,16 +358,20 @@ void saveLibraryToFile(book_t *library, const char *filename) {
     displayMemoryUsage();
 }
 
-void loadLibraryFromFile(book_t **library, int *bookCount, const char *filename) {
+void loadLibraryFromFile(book_t **library, int *bookCount, const char *filename)
+{
     FILE *file = fopen(filename, "r");
-    if (!file) {
+    if (!file)
+    {
         printf("Error al abrir el archivo para cargar la biblioteca.\n");
         return;
     }
 
-    while (!feof(file)) {
+    while (!feof(file))
+    {
         book_t *new_book = (book_t *)malloc(sizeof(book_t));
-        if (!new_book) {
+        if (!new_book)
+        {
             printf("Error al asignar memoria para el nuevo libro.\n");
             fclose(file);
             return;
@@ -329,13 +386,20 @@ void loadLibraryFromFile(book_t **library, int *bookCount, const char *filename)
         char genre_str[50];
         fgets(genre_str, 50, file);
         genre_str[strcspn(genre_str, "\n")] = '\0';
-        if (strcmp(genre_str, "Ficcion") == 0) new_book->genre = FICTION;
-        else if (strcmp(genre_str, "No Ficcion") == 0) new_book->genre = NON_FICTION;
-        else if (strcmp(genre_str, "Ciencia") == 0) new_book->genre = SCIENCE;
-        else if (strcmp(genre_str, "Historia") == 0) new_book->genre = HISTORY;
-        else if (strcmp(genre_str, "Fantasia") == 0) new_book->genre = FANTASY;
-        else if (strcmp(genre_str, "Biografia") == 0) new_book->genre = BIOGRAPHY;
-        else new_book->genre = OTHER;
+        if (strcmp(genre_str, "Ficcion") == 0)
+            new_book->genre = FICTION;
+        else if (strcmp(genre_str, "No Ficcion") == 0)
+            new_book->genre = NON_FICTION;
+        else if (strcmp(genre_str, "Ciencia") == 0)
+            new_book->genre = SCIENCE;
+        else if (strcmp(genre_str, "Historia") == 0)
+            new_book->genre = HISTORY;
+        else if (strcmp(genre_str, "Fantasia") == 0)
+            new_book->genre = FANTASY;
+        else if (strcmp(genre_str, "Biografia") == 0)
+            new_book->genre = BIOGRAPHY;
+        else
+            new_book->genre = OTHER;
         fscanf(file, "%d\n", &new_book->quantity);
 
         new_book->next = *library;
@@ -349,17 +413,21 @@ void loadLibraryFromFile(book_t **library, int *bookCount, const char *filename)
     displayMemoryUsage();
 }
 
-void saveMembersToFile(member_t *members, const char *filename) {
+void saveMembersToFile(member_t *members, const char *filename)
+{
     FILE *file = fopen(filename, "w");
-    if (!file) {
+    if (!file)
+    {
         printf("Error al abrir el archivo para guardar los miembros.\n");
         return;
     }
 
     member_t *current = members;
-    while (current) {
+    while (current)
+    {
         fprintf(file, "%d\n%s\n%d\n", current->id, current->name, current->issued_count);
-        for (int i = 0; i < current->issued_count; i++) {
+        for (int i = 0; i < current->issued_count; i++)
+        {
             fprintf(file, "%d\n", current->issued_books[i]);
         }
         current = current->next;
@@ -369,16 +437,20 @@ void saveMembersToFile(member_t *members, const char *filename) {
     printf("Miembros guardados exitosamente en %s\n", filename);
 }
 
-void loadMembersFromFile(member_t **members, int *memberCount, const char *filename) {
+void loadMembersFromFile(member_t **members, int *memberCount, const char *filename)
+{
     FILE *file = fopen(filename, "r");
-    if (!file) {
+    if (!file)
+    {
         printf("Error al abrir el archivo para cargar los miembros.\n");
         return;
     }
 
-    while (!feof(file)) {
+    while (!feof(file))
+    {
         member_t *new_member = (member_t *)malloc(sizeof(member_t));
-        if (!new_member) {
+        if (!new_member)
+        {
             printf("Error al asignar memoria para el nuevo miembro.\n");
             fclose(file);
             return;
@@ -389,7 +461,8 @@ void loadMembersFromFile(member_t **members, int *memberCount, const char *filen
         new_member->name[strcspn(new_member->name, "\n")] = '\0';
         fscanf(file, "%d\n", &new_member->issued_count);
         new_member->issued_books = (int *)malloc(new_member->issued_count * sizeof(int));
-        for (int i = 0; i < new_member->issued_count; i++) {
+        for (int i = 0; i < new_member->issued_count; i++)
+        {
             fscanf(file, "%d\n", &new_member->issued_books[i]);
         }
 
@@ -405,20 +478,25 @@ void loadMembersFromFile(member_t **members, int *memberCount, const char *filen
     displayMemoryUsage();
 }
 
-void displayMembers(member_t *members, book_t *library) {
-    if (!members) {
+void displayMembers(member_t *members, book_t *library)
+{
+    if (!members)
+    {
         printf("\nNo hay miembros disponibles.\n");
         return;
     }
 
     member_t *current = members;
     printf("\nMiembros disponibles en biblioteca:\n");
-    while (current) {
+    while (current)
+    {
         printf("\nID miembro: %d\nNombre: %s\nCantidad de libros prestados: %d\n",
-            current->id, current->name, current->issued_count);
-        for (int i = 0; i < current->issued_count; i++) {
+               current->id, current->name, current->issued_count);
+        for (int i = 0; i < current->issued_count; i++)
+        {
             book_t *book = findBookById(library, current->issued_books[i]);
-            if (book) {
+            if (book)
+            {
                 printf("  Libro ID: %d\n  Titulo: %s\n  Autor: %s\n", book->id, book->title, book->author);
             }
         }
@@ -427,19 +505,24 @@ void displayMembers(member_t *members, book_t *library) {
     displayMemoryUsage();
 }
 
-void searchMember(member_t *members, book_t *library) {
+void searchMember(member_t *members, book_t *library)
+{
     int memberID;
     printf("\nIngresa el ID del miembro: ");
     scanf("%d", &memberID);
 
     member_t *current = members;
-    while (current) {
-        if (current->id == memberID) {
+    while (current)
+    {
+        if (current->id == memberID)
+        {
             printf("\nID miembro: %d\nNombre: %s\nCantidad de libros prestados: %d\n",
-                current->id, current->name, current->issued_count);
-            for (int i = 0; i < current->issued_count; i++) {
+                   current->id, current->name, current->issued_count);
+            for (int i = 0; i < current->issued_count; i++)
+            {
                 book_t *book = findBookById(library, current->issued_books[i]);
-                if (book) {
+                if (book)
+                {
                     printf("  Libro ID: %d\n  Titulo: %s\n  Autor: %s\n", book->id, book->title, book->author);
                 }
             }
@@ -452,7 +535,8 @@ void searchMember(member_t *members, book_t *library) {
     displayMemoryUsage();
 }
 
-int main() {
+int main()
+{
     // Variables automaticas (almacenadas en el stack)
     book_t *library = NULL;
     member_t *members = NULL;
@@ -462,7 +546,8 @@ int main() {
     loadLibraryFromFile(&library, &bookCount, "library.txt");
     loadMembersFromFile(&members, &memberCount, "members.txt");
 
-    do {
+    do
+    {
         printf("\nMenu de sistema de manejo de biblioteca\n");
         printf("\t1. Agregar un libro\n");
         printf("\t\t- Ingresa los detalles del libro como ID, titulo, autor, ano de publicacion, genero y cantidad.\n");
@@ -483,38 +568,39 @@ int main() {
         printf("Indica tu opcion: ");
         scanf("%d", &choice);
 
-        switch (choice) {
-            case 1:
-                addBook(&library, &bookCount);
-                break;
-            case 2:
-                displayBooks(library);
-                break;
-            case 3:
-                addMember(&members, &memberCount);
-                break;
-            case 4:
-                issueBook(library, members);
-                break;
-            case 5:
-                returnBook(library, members);
-                break;
-            case 6:
-                displayMembers(members, library);
-                break;
-            case 7:
-                searchMember(members, library);
-                break;
-            case 8:
-                saveLibraryToFile(library, "library.txt");
-                saveMembersToFile(members, "members.txt");
-                printf("Saliendo del programa\n");
-                break;
-            default:
-                printf("Esta no es una opcion valida!!!\n");
-                break;
+        switch (choice)
+        {
+        case 1:
+            addBook(&library, &bookCount);
+            break;
+        case 2:
+            displayBooks(library);
+            break;
+        case 3:
+            addMember(&members, &memberCount);
+            break;
+        case 4:
+            issueBook(library, members);
+            break;
+        case 5:
+            returnBook(library, members);
+            break;
+        case 6:
+            displayMembers(members, library);
+            break;
+        case 7:
+            searchMember(members, library);
+            break;
+        case 8:
+            saveLibraryToFile(library, "library.txt");
+            saveMembersToFile(members, "members.txt");
+            printf("Saliendo del programa\n");
+            break;
+        default:
+            printf("Esta no es una opcion valida!!!\n");
+            break;
         }
-    } while(choice != 8);
+    } while (choice != 8);
 
     freeLibrary(library);
     freeMembers(members);
