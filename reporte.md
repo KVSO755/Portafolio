@@ -7,7 +7,7 @@ Materia: Paradigmas
 
 Practica 0
 
-Docente: Carlos Gallegos
+Docente: Carlos Gallegos.
 
 
 
